@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>CSS GRID & FLEXBOX</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/custom.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-background="https://farm4.staticflickr.com/3120/2889002644_57299a6f5a_b.jpg" data-state="intro-slide">
+					<div>
+						<h1>CSS Grid & Flexbox</h1>
+						<h3>Next generation layouts</h3>
+						<p>
+							<small><a href="http://creinartz.de">Christoph Reinartz</a> / <a href="http://twitter.com/pistenprinz">@pistenprinz</a></small>
+						</p>
+					</div>
+				</section>
+
+				<section>
+					<h2>Layouting in CSS</h2>
+					<p>
+						<img src="https://i.imgur.com/Q3cUg29.gif">
+					</p>
+				</section>
+
+				<section>
+					<h2>Layout modes in css</h2>
+					<ul>
+						<li>block & float</li>
+						<li>inline layout</li>
+						<li>inline-block</li>
+						<li>table layout</li>
+						<li>positioned layout</li>
+						<li>flexible box layout *</li>
+						<li>grid layout *</li>
+					</ul>
+					<p><small>*) in development</small></p>
+
+				</section>
+
+				<section>
+					<h2>Layouting in CSS</h2>
+					<p>
+						<img src="https://pbs.twimg.com/media/B2mW8NiCQAA6IIP.jpg">
+					</p>
+				</section>
+
+				<section>
+					<h2>u no this?</h2>
+					<style>
+						.float-container {
+							font-size: 14px !important;
+							text-align: left !important;
+							float: left;
+							width: 100%;
+							background-color: #ffbebe;
+						}
+						.a, .b, .c {
+							width: 33.33333% !important;
+							float: left;
+							box-sizing: border-box;
+							color: #000 !important;
+						}
+						.a > h1, .b > h1, .c > h1 {color: #000 !important;}
+						.a {background-color: #aaa;}
+						.b {background-color: #bbb;}
+						.c {background-color: #ccc;}
+					</style>
+<pre><code data-trim contenteditable>
+.float-container {
+  float: left;
+  width: 100%;
+  background-color: #aaa;
+}
+.a, .b, .c {
+  width: 33.33333%;
+  float: left;
+  box-sizing: border-box;
+}
+</code></pre>
+					<div class="float-container">
+						<div class="box a"><h1>A</h1><p>One sentence.</p></div>
+						<div class="box b"><h1>B</h1><p>A medium amount of text, but still nothing really interesting to read here. I promise.</p></div>
+						<div class="box c"><h1>C</h1><p>Yummy ipsum lorem kitten, bacon and mushroom. Rainbows rainbows pigeon wereunicorn app surprise, kittens pegasus delight unicorn wereunicorn rainbows. Pigeon unicorn surprise pony pigeon wereunicorn app app.</p></div>
+					</div>
+
+				</section>
+				<section>
+					<h2>block & float</h2>
+					<p>
+						Most common layout mode today. Used in many frameworks and grid layouts, e.g. bootstrap
+					</p>
+
+				</section>
+
+				<section>
+					<h2>it is a hack - clearfix</h2>
+					<pre><code data-trim contenteditable>
+.cf:before,
+.cf:after {
+  content: " "; /* 1 */
+  display: table; /* 2 */
+}
+
+.cf:after {
+  clear: both;
+}
+
+/**
+* For IE 6/7 only
+* Include this rule to trigger hasLayout and contain floats.
+*/
+.cf {
+  *zoom: 1;
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>inline-block</h2>
+
+					<p>
+						the 4px "bug"
+					</p>
+					<pre><code data-trim contenteditable>
+<nav>
+  <a href="#">One</a>
+  <a href="#">Two</a>
+  <a href="#">Three</a>
+</nav>
+					</code></pre>
+					<pre><code data-trim contenteditable>
+nav a {
+  display: inline-block;
+  background: #ccc;
+}
+					</code></pre>
+					<style>
+						nav a {
+							display: inline-block;
+							background: #ccc;
+						}
+					</style>
+					<nav>
+						<a href="#">One</a>
+						<a href="#">Two</a>
+						<a href="#">Three</a>
+					</nav>
+
+				</section>
+
+				<section>
+					<h2>but wait...<br>there are hacks for that</h2>
+
+					<ul>
+						<li>remove spaces between elements</li>
+						<li>negative margins</li>
+						<li>skip closing tag</li>
+						<li>set font-size to zero</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>table layout</h2>
+
+					<p>
+						table layout for the rescue?!
+					</p>
+					<p>
+						even support IE8!
+					</p>
+					<p>
+						we need to change stack order of elements in RWD
+					</p>
+				</section>
+
+
+				<section>
+					<h2>table layout - responsive</h2>
+					<pre><code data-trim contenteditable>
+<div class="boxes">
+  <div class="one box">Box One</div>
+  <div class="two box">Box Two</div>
+  <div class="three box">Box Three</div>
+  <div class="four box">Box Four</div>
+</div>
+					</code></pre>
+					<pre><code data-trim contenteditable>
+.boxes {
+  display: table;
+  margin: 0 auto;
+}
+.box {
+  display: table-cell;
+  width: 25%;
+  height: 15em;
+  text-align: center;
+  line-height: 15em;
+  color: #fff;
+}
+.one { background: #333; }
+.two {
+  background:#fff;
+  color:#333;
+}
+.three { background:#aaa; }
+.four { background:#dc002e; }
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>table layout - responsive</h2>
+					<pre><code data-trim contenteditable>
+/* 768px */
+@media only screen and (max-width:48em) {
+  .boxes {
+    display:table;
+    width:100%;
+  }
+  .box {
+    display:block;
+    width:100%;
+  }
+  .three { display:table-caption; }
+  .four { display:table-header-group; }
+  .one { display:table-footer-group; }
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>table layout - responsive</h2>
+					<style>
+						.boxes {
+							display: table;
+							margin: 0 auto;
+							width:100%;
+						}
+						.box {
+							display: table-cell;
+							width: 25%;
+							text-align: center;
+							color: #fff;
+						}
+						.one { background: #333; }
+						.two {
+							background:#fff;
+							color:#333;
+						}
+						.three { background:#aaa; }
+						.four { background:#dc002e; }
+						@media only screen and (max-width:48em) {
+							.boxes {
+								display:table;
+								width:100%;
+							}
+							.box {
+								display:block;
+								width:100%;
+							}
+							.three { display:table-caption; }
+							.four { display:table-header-group; }
+							.one { display:table-footer-group; }
+						}
+					</style>
+					<div class="boxes">
+						<div class="one box">Box One</div>
+						<div class="two box">Box Two</div>
+						<div class="three box">Box Three</div>
+						<div class="four box">Box Four</div>
+					</div>
+
+				</section>
+
+				<section>
+					<h2>WTF</h2>
+					<img src="http://cdn.alltheragefaces.com/img/faces/large/surprised-reaction-guy-l.png" width="600">
+				</section>
+
+				<section>
+					<h2>positioned layout</h2>
+					<p>
+						<img src="http://cdn.meme.am/instances/500x/59141167.jpg">
+					</p>
+				</section>
+
+				<section>
+					<h2>positioned layout</h2>
+					<p>
+						designed for positioning elements without much interaction with other elements!
+					</p>
+					<p>
+						elements are taken off from flow
+					</p>
+				</section>
+
+				<section>
+					<h2>GSS - Grid stylesheets</h2>
+					<p>
+						wanna really rely on javascript for layouting?
+					</p>
+					<p>
+						shouldn't the browser do the layout?!
+					</p>
+				</section>
+
+				<section>
+					<h2>A new hope</h2>
+					<p>
+						CSS3 flexbox
+					</p>
+					<p>
+						CSS grid
+					</p>
+				</section>
+
+				<section>
+					<h2>CSS Grid</h2>
+					<p>
+						The grid property in CSS is the foundation of Grid Layout. It aims at fixing issues with older layout techniques like float and inline-block, which both have issues and weren't really designed for page layout.
+					</p>
+				</section>
+
+				<section data-background-iframe="http://caniuse.com/#search=css%20grid">
+					<!-- -->
+				</section>
+
+				<section data-background-iframe="http://igalia.github.io/css-grid-layout/enable.html">
+					<!-- -->
+				</section>
+
+				<section >
+					<h2>CSS3 flexbox</h2>
+					<p>
+						The Flexbox Layout (Flexible Box) module (currently a W3C Last Call Working Draft) aims at providing a more efficient way to lay out, align and distribute space among items in a container, even when their size is unknown and/or dynamic (thus the word "flex").
+					</p>
+				</section>
+
+				<section >
+					<h2>CSS3 flexbox</h2>
+					<p>
+						Note: Flexbox layout is most appropriate to the components of an application, and small-scale layouts, while the Grid layout is intended for larger scale layouts.
+					</p>
+				</section>
+
+				<section data-background-iframe="http://caniuse.com/#search=flexbox">
+					<!-- -->
+				</section>
+
+				<section >
+					<h2>CSS3 flexbox</h2>
+					<p>
+						see it in production...
+					</p>
+				</section>
+
+				<section data-background-iframe="http://www.theguardian.com/uk">
+					<!-- -->
+				</section>
+
+				<section>
+					<h2>the flexbox concept</h2>
+					<p>
+						the flex container has the ability to alter its items to best
+						fill the available space
+					</p>
+				</section>
+
+				<section>
+					<h2>the flexbox concept</h2>
+					<p>
+						the flexbox layout is direction-agnostic opposed to the regular layouts
+					</p>
+				</section>
+
+				<section>
+					<h2>flex container</h2>
+<pre><code data-trim contenteditable>
+.container {
+  display: flex;
+}
+</code></pre>
+					<p>
+						defining a flex container. all children are flex-items
+					</p>
+				</section>
+
+				<section>
+					<h2>container & items</h2>
+					<p>
+						<img src="img/flex_container.png" alt="" style="background: #dfdfdf;">
+					</p>
+				</section>
+
+				<section>
+					<h2>container: flex-direction</h2>
+<pre><code data-trim contenteditable>
+.container {
+  flex-direction: row | row-reverse | column | column-reverse;
+}
+</code></pre>
+					<p>
+						This establishes the main-axis, thus defining the direction flex items are placed in the flex container.
+					</p>
+				</section>
+
+				<section>
+					<h2>flex-direction</h2>
+					<p>
+						<img src="img/flex_direction.png" alt="" style="background: #dfdfdf;">
+					</p>
+				</section>
+
+				<section>
+					<h2>container: flex-wrap</h2>
+<pre><code data-trim contenteditable>
+.container{
+  flex-wrap: nowrap | wrap | wrap-reverse;
+}
+</code></pre>
+					<p>
+						By default, flex items will all try to fit onto one line. You can change that and allow the items to wrap as needed with this property
+					</p>
+				</section>
+
+				<section>
+					<h2>flex-wrap</h2>
+					<p>
+						<img src="img/flex_wrap.png" alt="" style="background: #dfdfdf;">
+					</p>
+				</section>
+
+				<section>
+					<h2>container: flex-flow</h2>
+<pre><code data-trim contenteditable>
+flex-flow: <‘flex-direction’> || <‘flex-wrap’>
+</code></pre>
+					<p>
+						This is a shorthand flex-direction and flex-wrap
+					</p>
+				</section>
+
+				<section>
+					<h2>container: justify-content</h2>
+<pre><code data-trim contenteditable>
+.container {
+  justify-content: flex-start | flex-end | center | space-between | space-around;
+}
+</code></pre>
+					<p>
+						This defines the alignment along the main axis.
+					</p>
+				</section>
+
+				<section>
+					<h2>justify-content</h2>
+					<p>
+						<img src="img/justify-content.png" alt="" style="background: #dfdfdf;">
+					</p>
+				</section>
+
+				<section>
+					<h2>container: align-items</h2>
+<pre><code data-trim contenteditable>
+.container {
+  align-items: flex-start | flex-end | center | baseline | stretch;
+}
+</code></pre>
+					<p>
+						This defines the default behaviour for how flex items are laid out along the cross axis on the current line.
+					</p>
+				</section>
+
+				<section>
+					<h2>align-items</h2>
+					<p>
+						<img src="img/align-items.png" alt="" style="background: #dfdfdf;">
+					</p>
+				</section>
+
+				<section>
+					<h2>container: align-content</h2>
+<pre><code data-trim contenteditable>
+.container {
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+}
+</code></pre>
+					<p>
+						This aligns a flex container's lines within when there is extra space in the cross-axis, similar to how justify-content aligns individual items within the main-axis.
+					</p>
+				</section>
+
+				<section>
+					<h2>align-content</h2>
+					<p>
+						<img src="img/align-content.png" alt="" style="background: #dfdfdf;">
+					</p>
+				</section>
+
+				<section>
+					<h2>flex-items</h2>
+					<p>
+						<img src="img/flex_container.png" alt="" style="background: #dfdfdf;">
+					</p>
+				</section>
+
+				<section>
+					<h2>order</h2>
+<pre><code data-trim contenteditable>
+.item {
+  order: integer;
+}
+</code></pre>
+					<p>
+						By default, flex items are laid out in the source order. However, the order property controls the order in which they appear in the flex container.
+					</p>
+				</section>
+
+				<section>
+					<h2>order</h2>
+					<p>
+						<img src="img/order.png" alt="" style="background: #dfdfdf;">
+					</p>
+				</section>
+
+				<section>
+					<h2>flex-grow</h2>
+<pre><code data-trim contenteditable>
+.item {
+  flex-grow: number; /* default 0 */
+}
+</code></pre>
+					<p>
+						This defines the ability for a flex item to grow if necessary.
+					</p>
+				</section>
+
+				<section>
+					<h2>flew-grow</h2>
+					<p>
+						<img src="img/flex-grow.png" alt="" style="background: #dfdfdf;">
+					</p>
+				</section>
+
+				<section>
+					<h2>flex-shrink</h2>
+<pre><code data-trim contenteditable>
+.item {
+  flex-shrink: number; /* default 1 */
+}
+</code></pre>
+					<p>
+						This defines the ability for a flex item to shrink if necessary.
+					</p>
+				</section>
+
+				<section>
+					<h2>flex-basis</h2>
+<pre><code data-trim contenteditable>
+.item {
+  flex-basis: length | auto; /* default auto */
+}
+</code></pre>
+					<p>
+						This defines the default size of an element before the remaining space is distributed.
+					</p>
+				</section>
+
+				<section>
+					<h2>flex</h2>
+<pre><code data-trim contenteditable>
+.item {
+  flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+}
+</code></pre>
+					<p>
+						This is the shorthand for flex-grow, flex-shrink and flex-basis combined.
+					</p>
+				</section>
+
+				<section>
+					<h2>align-self</h2>
+<pre><code data-trim contenteditable>
+.item {
+  align-self: auto | flex-start | flex-end | center | baseline | stretch;
+}
+</code></pre>
+					<p>
+						This allows the default alignment (or the one specified by align-items) to be overridden for individual flex items.
+					</p>
+				</section>
+
+				<section>
+					<h2>vendor prefixes</h2>
+					<pre><code data-trim contenteditable>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.item {
+  flex: 0 1 auto;
+}
+					</code></pre>
+
+				</section>
+
+				<section>
+					<h2>vendor prefixes</h2>
+					<pre><code data-trim contenteditable>
+.container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.item {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+}
+					</code></pre>
+
+				</section>
+
+				<section>
+					<h2>WTF</h2>
+					<img src="http://cdn.meme.am/instances/500x/51253042.jpg" alt="">
+				</section>
+
+				<section>
+					<h2>Sass / Autoprefixer</h2>
+					<p>write a mixin</p>
+					<pre><code data-trim contenteditable>
+@mixin order($val) {
+  -webkit-box-ordinal-group: $val;
+  -moz-box-ordinal-group: $val;
+  -ms-flex-order: $val;
+  -webkit-order: $val;
+  order: $val;
+}
+					</code></pre>
+					<p>or use autoprefixer</p>
+				</section>
+
+				<section>
+					<h2>Flexbox example</h2>
+
+					<p>
+						<a href="http://codepen.io/creinartz/pen/vEWRXb" target="_blank">flexbox demo</a>
+					</p>
+				</section>
+
+				<section>
+					<h2>Photo-Sources</h2>
+					<p>
+						Slide 1:<br>
+						<small class="img-copy"><a href="https://www.flickr.com/photos/adactio/2889002644" target="_blank">https://www.flickr.com/photos/adactio/2889002644</a></small><br>
+						Slide 2:<br>
+						<small class="img-copy"><a href="https://i.imgur.com/Q3cUg29.gif" target="_blank">https://i.imgur.com/Q3cUg29.gif</a></small><br>
+						Slide 4:<br>
+						<small class="img-copy"><a href="https://pbs.twimg.com/media/B2mW8NiCQAA6IIP.jpg" target="_blank">https://pbs.twimg.com/media/B2mW8NiCQAA6IIP.jpg</a></small><br>
+						Slide 14:<br>
+						<small class="img-copy"><a href="http://cdn.alltheragefaces.com/img/faces/large/surprised-reaction-guy-l.png" target="_blank">http://cdn.alltheragefaces.com/img/faces/large/surprised-reaction-guy-l.png</a></small>
+						<br>Slide 15:<br>
+						<small class="img-copy"><a href="http://cdn.meme.am/instances/500x/59141167.jpg" target="_blank">http://cdn.meme.am/instances/500x/59141167.jpg</a></small>
+						<br>Slide 52:<br>
+						<small class="img-copy"><a href="http://cdn.meme.am/instances/500x/51253042.jpg" target="_blank">http://cdn.meme.am/instances/500x/51253042.jpg</a></small>
+					</p>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<!--
+				<section>
+					<section>
+						<h2>Vertical Slides</h2>
+						<p>Slides can be nested inside of each other.</p>
+						<p>Use the <em>Space</em> key to navigate through all slides.</p>
+						<br>
+						<a href="#" class="navigate-down">
+							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section>
+						<h2>Basement Level 1</h2>
+						<p>Nested slides are useful for adding additional detail underneath a high level horizontal slide.</p>
+					</section>
+					<section>
+						<h2>Basement Level 2</h2>
+						<p>That's it, time to go back up.</p>
+						<br>
+						<a href="#/2">
+							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="-webkit-transform: rotate(180deg);">
+						</a>
+					</section>
+				</section>
+
+				<section>
+					<h2>Slides</h2>
+					<p>
+						Not a coder? Not a problem. There's a fully-featured visual editor for authoring these, try it out at <a href="http://slides.com" target="_blank">http://slides.com</a>.
+					</p>
+				</section>
+
+				<section>
+					<h2>Point of View</h2>
+					<p>
+						Press <strong>ESC</strong> to enter the slide overview.
+					</p>
+					<p>
+						Hold down alt and click on any element to zoom in on it using <a href="http://lab.hakim.se/zoom-js">zoom.js</a>. Alt + click anywhere to zoom back out.
+					</p>
+				</section>
+
+				<section>
+					<h2>Touch Optimized</h2>
+					<p>
+						Presentations look great on touch devices, like mobile phones and tablets. Simply swipe through your slides.
+					</p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						## Markdown support
+
+						Write content using inline or external Markdown.
+						Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
+
+						```
+						<section data-markdown>
+						  ## Markdown support
+
+						  Write content using inline or external Markdown.
+						  Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
+						</section>
+						```
+					</script>
+				</section>
+
+				<section>
+					<section id="fragments">
+						<h2>Fragments</h2>
+						<p>Hit the next arrow...</p>
+						<p class="fragment">... to step through ...</p>
+						<p><span class="fragment">... a</span> <span class="fragment">fragmented</span> <span class="fragment">slide.</span></p>
+
+						<aside class="notes">
+							This slide has fragments which are also stepped through in the notes window.
+						</aside>
+					</section>
+					<section>
+						<h2>Fragment Styles</h2>
+						<p>There's different types of fragments, like:</p>
+						<p class="fragment grow">grow</p>
+						<p class="fragment shrink">shrink</p>
+						<p class="fragment roll-in">roll-in</p>
+						<p class="fragment fade-out">fade-out</p>
+						<p class="fragment current-visible">current-visible</p>
+						<p class="fragment highlight-red">highlight-red</p>
+						<p class="fragment highlight-blue">highlight-blue</p>
+					</section>
+				</section>
+
+				<section id="transitions">
+					<h2>Transition Styles</h2>
+					<p>
+						You can select from different transitions, like: <br>
+						<a href="?transition=none#/transitions">None</a> -
+						<a href="?transition=fade#/transitions">Fade</a> -
+						<a href="?transition=slide#/transitions">Slide</a> -
+						<a href="?transition=convex#/transitions">Convex</a> -
+						<a href="?transition=concave#/transitions">Concave</a> -
+						<a href="?transition=zoom#/transitions">Zoom</a>
+					</p>
+				</section>
+-->
+<!--
+				<section id="themes">
+					<h2>Themes</h2>
+					<p>
+						reveal.js comes with a few themes built in: <br>
+
+
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/black.css'); return false;">Black (default)</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/white.css'); return false;">White</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/league.css'); return false;">League</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/sky.css'); return false;">Sky</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/beige.css'); return false;">Beige</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/simple.css'); return false;">Simple</a> <br>
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/serif.css'); return false;">Serif</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/night.css'); return false;">Night</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/moon.css'); return false;">Moon</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/solarized.css'); return false;">Solarized</a>
+					</p>
+				</section>
+
+				<section>
+					<section data-background="#dddddd">
+						<h2>Slide Backgrounds</h2>
+						<p>
+							Set <code>data-background="#dddddd"</code> on a slide to change the background color. All CSS color formats are supported.
+						</p>
+						<a href="#" class="navigate-down">
+							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png">
+						<h2>Image Backgrounds</h2>
+						<pre><code>&lt;section data-background="image.png"&gt;</code></pre>
+					</section>
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px">
+						<h2>Tiled Backgrounds</h2>
+						<pre><code style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
+					</section>
+					<section data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000">
+						<div style="background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px;">
+							<h2>Video Backgrounds</h2>
+							<pre><code style="word-wrap: break-word;">&lt;section data-background-video="video.mp4,video.webm"&gt;</code></pre>
+						</div>
+					</section>
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h2>Background Transitions</h2>
+					<p>
+						Different background transitions are available via the backgroundTransition option. This one's called "zoom".
+					</p>
+					<pre><code>Reveal.configure({ backgroundTransition: 'zoom' })</code></pre>
+				</section>
+
+				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
+					<h2>Background Transitions</h2>
+					<p>
+						You can override background transitions per-slide.
+					</p>
+					<pre><code style="word-wrap: break-word;">&lt;section data-background-transition="zoom"&gt;</code></pre>
+				</section>
+
+				<section>
+					<h2>Pretty Code</h2>
+					<pre><code data-trim contenteditable>
+function linkify( selector ) {
+  if( supports3DTransforms ) {
+
+    var nodes = document.querySelectorAll( selector );
+
+    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
+      var node = nodes[i];
+
+      if( !node.className ) {
+        node.className += ' roll';
+      }
+    }
+  }
+}
+					</code></pre>
+					<p>Code syntax highlighting courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
+				</section>
+
+				<section>
+					<h2>Marvelous List</h2>
+					<ul>
+						<li>No order here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Fantastic Ordered List</h2>
+					<ol>
+						<li>One is smaller than...</li>
+						<li>Two is smaller than...</li>
+						<li>Three!</li>
+					</ol>
+				</section>
+
+				<section>
+					<h2>Tabular Tables</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Item</th>
+								<th>Value</th>
+								<th>Quantity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Apples</td>
+								<td>$1</td>
+								<td>7</td>
+							<tr>
+							<tr>
+								<td>Lemonade</td>
+								<td>$2</td>
+								<td>18</td>
+							<tr>
+							<tr>
+								<td>Bread</td>
+								<td>$3</td>
+								<td>2</td>
+							<tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<h2>Clever Quotes</h2>
+					<p>
+						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;The nice thing about standards is that there are so many to choose from&rdquo;</q> and block:
+					</p>
+					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
+						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
+					</blockquote>
+				</section>
+
+				<section>
+					<h2>Intergalactic Interconnections</h2>
+					<p>
+						You can link between slides internally,
+						<a href="#/2/3">like this</a>.
+					</p>
+				</section>
+
+				<section>
+					<h2>Speaker View</h2>
+					<p>There's a <a href="https://github.com/hakimel/reveal.js#speaker-notes">speaker view</a>. It includes a timer, preview of the upcoming slide as well as your speaker notes.</p>
+					<p>Press the <em>S</em> key to try it out.</p>
+
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+
+				<section>
+					<h2>Export to PDF</h2>
+					<p>Presentations can be <a href="https://github.com/hakimel/reveal.js#pdf-export">exported to PDF</a>, here's an example:</p>
+					<iframe src="//www.slideshare.net/slideshow/embed_code/42840540" width="445" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+				</section>
+
+				<section>
+					<h2>Global State</h2>
+					<p>
+						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
+						will be added as a class to the document element when the slide is open. This lets you
+						apply broader style changes, like switching the page background.
+					</p>
+				</section>
+
+				<section data-state="customevent">
+					<h2>State Events</h2>
+					<p>
+						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
+					</p>
+					<pre><code class="javascript" data-trim contenteditable style="font-size: 18px;">
+Reveal.addEventListener( 'customevent', function() {
+	console.log( '"customevent" has fired' );
+} );
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Take a Moment</h2>
+					<p>
+						Press B or . on your keyboard to pause the presentation. This is helpful when you're on stage and want to take distracting slides off the screen.
+					</p>
+				</section>
+
+				<section>
+					<h2>Much more</h2>
+					<ul>
+						<li>Right-to-left support</li>
+						<li><a href="https://github.com/hakimel/reveal.js#api">Extensive JavaScript API</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js#auto-sliding">Auto-progression</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js#parallax-background">Parallax backgrounds</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js#keyboard-bindings">Custom keyboard bindings</a></li>
+					</ul>
+				</section>
+
+				<section style="text-align: left;">
+					<h1>THE END</h1>
+					<p>
+						- <a href="http://slides.com">Try the online editor</a> <br>
+						- <a href="https://github.com/hakimel/reveal.js">Source code &amp; documentation</a>
+					</p>
+				</section>
+-->
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				// Parallax background image
+				//parallaxBackgroundImage: 'https://farm1.staticflickr.com/136/402173834_9cff2aaf59_b.jpg', // e.g. "https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg"
+
+				// Parallax background size
+				//parallaxBackgroundSize: '2920px 1280px', // CSS syntax, e.g. "2100px 900px" - currently only pixels are supported (don't use % or auto)
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
