@@ -43,10 +43,12 @@
 			<div class="slides">
 				<section data-background="https://farm4.staticflickr.com/3120/2889002644_57299a6f5a_b.jpg" data-state="intro-slide">
 					<div>
-						<h1>CSS Grid & Flexbox</h1>
+						<h1>CSS3 Grid & Flexbox</h1>
 						<h3>Next generation layouts</h3>
 						<p>
-							<small><a href="http://creinartz.de">Christoph Reinartz</a> / <a href="http://twitter.com/pistenprinz">@pistenprinz</a></small>
+							<small>PottJS 19.03.2015</small><br>
+							<small class="author"><a href="http://creinartz.de">Christoph Reinartz</a> / <a href="http://twitter.com/pistenprinz">@pistenprinz</a> / <a href="http://www.trivago.com">trivago GmbH</a></small>
+
 						</p>
 					</div>
 				</section>
@@ -120,6 +122,13 @@
 					</div>
 
 				</section>
+
+				<section>
+					<h2>layouting in css</h2>
+					<img src="http://i.imgur.com/2LxSZxE.gif">
+				</section>
+
+
 				<section>
 					<h2>block & float</h2>
 					<p>
@@ -325,7 +334,7 @@ nav a {
 						designed for positioning elements without much interaction with other elements!
 					</p>
 					<p>
-						elements are taken off from flow
+						fixed & absolute: elements are taken off from flow
 					</p>
 				</section>
 
@@ -356,11 +365,321 @@ nav a {
 					</p>
 				</section>
 
+				<section>
+					<h2>CSS Grid</h2>
+
+					<ul>
+						<li>first public draft april 2011</li>
+						<li>proposal developed my microsoft</li>
+						<li>early implementation in IE10</li>
+					</ul>
+				</section>
+
 				<section data-background-iframe="http://caniuse.com/#search=css%20grid">
 					<!-- -->
 				</section>
 
 				<section data-background-iframe="http://igalia.github.io/css-grid-layout/enable.html">
+					<!-- -->
+				</section>
+
+				<section>
+					<h2>defining a grid</h2>
+<pre><code data-trim contenteditable>
+.container {
+  display: grid;
+}
+</code></pre>
+					<p>
+						to start using a grid, define a grid on the container
+					</p>
+				</section>
+
+				<section>
+					<h2>defining a grid</h2>
+					<style>
+					.grid-wrapper {
+						   display: grid;
+						   grid-template-columns: 100px 10px 100px;
+						   grid-template-rows: auto 10px auto;
+						   width: 210px;
+						   margin: 0 auto !important;
+					   }
+					.grid-box {
+						background-color: #444;
+						color: #fff;
+						border-radius: 5px;
+						padding: 20px;
+						font-size: 150%;
+					}
+
+					</style>
+<pre><code data-trim contenteditable>
+<div class="grid-wrapper">
+  <div class="grid-box">A</div>
+  <div class="grid-box">B</div>
+  <div class="grid-box">C</div>
+  <div class="grid-box">D</div>
+</div>
+
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: 100px 10px 100px;
+  grid-template-rows: auto 10px auto;
+}
+</code></pre>
+					<div class="grid-wrapper">
+						<div class="grid-box">A</div>
+						<div class="grid-box">B</div>
+						<div class="grid-box">C</div>
+						<div class="grid-box">D</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>line base placement</h2>
+					<style>
+						.g-a {
+							grid-column-start: 1;
+							grid-column-end: 2;
+							grid-row-start: 1;
+							grid-row-end: 2;
+						}
+						.g-b {
+							grid-column-start: 3;
+							grid-column-end: 4;
+							grid-row-start: 1;
+							grid-row-end: 2;
+						}
+						.g-c {
+							grid-column-start: 1;
+							grid-column-end: 2;
+							grid-row-start: 3;
+							grid-row-end: 4;
+						}
+						.g-d {
+							grid-column-start: 3;
+							grid-column-end: 4;
+							grid-row-start: 3;
+							grid-row-end: 4;
+						}
+
+					</style>
+<pre><code data-trim contenteditable>
+.g-a {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+.g-d {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+</code></pre>
+					<div class="grid-wrapper">
+						<div class="grid-box g-a">A</div>
+						<div class="grid-box g-b">B</div>
+						<div class="grid-box g-c">C</div>
+						<div class="grid-box g-d">D</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>shorthands</h2>
+<pre><code data-trim contenteditable>
+.content {
+  .grid-column: 3 /4;
+  .grid-row: 2 / 3;
+}
+</code></pre>
+					<p>
+						declare start and end values shorthanded
+					</p>
+
+				</section>
+
+				<section>
+					<h2>grid-area</h2>
+<pre><code data-trim contenteditable>
+.content {
+  .grid-area: 2 / 3 / 3 / 4;
+}
+</code></pre>
+					<p>
+						declare row-start, col-start, row-end and col-end
+					</p>
+
+				</section>
+
+				<section>
+					<h2>line base placement<br>span keyword</h2>
+					<style>
+						.g1-a {
+							grid-column: 1;
+							grid-row: 1;
+						}
+						.g1-b {
+							grid-column: 3;
+							grid-row: 1 / span 3;
+						}
+						.g1-c {
+							grid-column: 1;
+							grid-row: 3;
+						}
+
+					</style>
+<pre><code data-trim contenteditable>
+.g1-b {
+  grid-column: 3;
+  grid-row: 1 / span 3;
+}
+</code></pre>
+					<div class="grid-wrapper">
+						<div class="grid-box g1-a">A</div>
+						<div class="grid-box g1-b">B</div>
+						<div class="grid-box g1-c">C</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>line base placement<br>named lines with span</h2>
+					<style>
+						.grid-wrapper-1 {
+							display: grid;
+							grid-template-columns: (col) 100px (gutter) 10px (col) 100px (gutter) 10px;
+							grid-template-rows: (row) auto (gutter) 10px (row) auto (gutter) 10px;
+							width: 210px;
+							margin: 0 auto !important;
+						}
+						.g2-a {
+							grid-column: col;
+							grid-row: row ;
+						}
+						.g2-b {
+							grid-column: col 2;
+							grid-row: row / span gutter 2;
+						}
+						.g2-c {
+							grid-column: col;
+							grid-row: row 2;
+						}
+
+					</style>
+<pre><code data-trim contenteditable>
+.grid-wrapper-1 {
+  display: grid;
+  grid-template-columns: (col) 100px (gutter) 10px (col) 100px (gutter) 10px;
+  grid-template-rows: (row) auto (gutter) 10px (row) auto (gutter) 10px;
+}
+.g1-b {
+  grid-column: col 2;
+  grid-row: row / span gutter 2;
+}
+</code></pre>
+					<div class="grid-wrapper-1">
+						<div class="grid-box g1-a">A</div>
+						<div class="grid-box g1-b">B</div>
+						<div class="grid-box g1-c">C</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>the repeat / auto keyword</h2>
+<pre><code data-trim contenteditable>
+.grid-wrapper-1 {
+  display: grid;
+  grid-template-columns: repeat(2, (col) 100px (gutter) 10px) ;
+  grid-template-rows: repeat(auto, (row) auto (gutter) 10px );
+}
+</code></pre>
+					<div class="grid-wrapper-1">
+						<div class="grid-box g1-a">A</div>
+						<div class="grid-box g1-b">B</div>
+						<div class="grid-box g1-c">C</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>Defining Grid Areas</h2>
+					<style>
+						.sidebar {
+							grid-area: sidebar;
+						}
+						.content {
+							grid-area: content;
+						}
+						.header {
+							grid-area: header;
+						}
+						.grid-wrapper-2 {
+							width: 470px;
+							margin: 0 auto !important;
+							display: grid;
+							grid-template-columns: 150px 10px 150px 10px 150px;
+							grid-template-rows: auto;
+							grid-template-areas: "header header header header header"
+							"sidebar . content content content";
+						}
+
+					</style>
+<pre><code data-trim contenteditable>
+.header {
+  grid-area: header;
+}
+.grid-wrapper-2 {
+  display: grid;
+  grid-template-columns: 100px 10px 100px 10px 100px;
+  grid-template-rows: auto;
+  grid-template-areas: "header header header header header"
+  "sidebar . content content content";
+}
+</code></pre>
+					<div class="grid-wrapper-2">
+						<div class="grid-box header">Header</div>
+						<div class="grid-box sidebar">Sidebar</div>
+						<div class="grid-box content">Content</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>Add Media Queries</h2>
+<pre><code data-trim contenteditable>
+@media only screen and (min-width: 400px) and (max-width: 540px)  {
+.wrapper {
+  grid-template-columns: 20% 5% auto;
+  grid-template-areas: "header header header"
+  "sidebar . content"
+  "sidebar2 sidebar2 sidebar2"
+  "footer footer footer";
+}
+}
+@media only screen and (min-width: 540px)   {
+.wrapper {
+  grid-template-columns: 100px 20px auto 20px 100px;
+  grid-template-areas: "header header header header header"
+  "sidebar . content . sidebar2"
+ "footer footer footer footer footer";
+}
+}
+</code></pre>
+
+				</section>
+
+				<section >
+					<h2>What else?</h2>
+					<ul>
+						<li>Source Independence</li>
+						<li>Layering Items</li>
+						<li>Grid Area as a new positioning context</li>
+						<li>Grid Auto Flow: Row vs. Column</li>
+						<li>1fr Unit - one "fractional unit"</li>
+					</ul>
+				</section>
+
+				<section data-background-iframe="http://gridbyexample.com/">
 					<!-- -->
 				</section>
 
